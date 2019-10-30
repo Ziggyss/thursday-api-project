@@ -5,17 +5,29 @@ const router = express.Router();
 
 router.post("/", (req, res) => {});
 
-router.post("/:id/posts", (req, res) => {});
+router.post("/:id/posts", validateUserId, (req, res) => {});
 
-router.get("/", (req, res) => {});
+router.get("/", (req, res) => {
+   Users.get()
+   .then(users => {
+       res.status(200).json(users)
+   })
+   .catch(err => {
+       res.status(500).json({
+           message: err.message
+       })
+   })
+});
 
-router.get("/:id", (req, res) => {});
+router.get("/:id", validateUserId, (req, res) => {
 
-router.get("/:id/posts", (req, res) => {});
+});
 
-router.delete("/:id", (req, res) => {});
+router.get("/:id/posts", validateUserId, (req, res) => {});
 
-router.put("/:id", (req, res) => {});
+router.delete("/:id", validateUserId, (req, res) => {});
+
+router.put("/:id", validateUserId, (req, res) => {});
 
 //custom middleware
 
@@ -27,7 +39,6 @@ function validateUserId(req, res, next) {
   } else {
     res.status(400).json({
       message: "Invalid user id",
-      error: error.message
     });
   }
 }
