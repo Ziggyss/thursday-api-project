@@ -1,4 +1,4 @@
-const express = "express";
+const express = require("express");
 const Posts = require("../posts/postDb");
 
 const router = express.Router();
@@ -20,9 +20,34 @@ router.get("/:id", validatePostId, (req, res) => {
   res.status(200).json(post);
 });
 
-router.delete("/:id", (req, res) => {});
+router.delete("/:id", validatePostId, (req, res) => {
+    Posts.remove(req.post.id)
+    .then(() => {
+      res.status(200).json({ message: "The post has been successfully deleted" });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: `Error removing the post: ${error.message}`
+      });
+    });
+});
 
-router.put("/:id", (req, res) => {});
+router.put("/:id", validatePostId, (req, res) => {
+    const { id } = req.params;
+    const updatedPost = req.body;
+    Posts.update(id, updatedPost)
+      .then(post => {
+        res.status(200).json({
+          message: `You successfully updated your post`,
+          post
+        });
+      })
+      .catch(error => {
+        res.status(500).json({
+          message: "Error updating the post: " + error.message
+        });
+      });
+});
 
 // custom middleware
 

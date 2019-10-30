@@ -89,10 +89,10 @@ router.delete("/:id", validateUserId, (req, res) => {
 router.put("/:id", validateUserId, (req, res) => {
   const { id } = req.params;
   const newUser = req.body;
-  Users.update(id, newUser)
+  Users.update(id, updatedUser)
     .then(user => {
       res.status(200).json({
-        message: `You successfully updated ${newUser.name}`,
+        message: `You successfully updated ${updatedUser.name}`,
         user
       });
     })
