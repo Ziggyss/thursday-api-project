@@ -1,4 +1,5 @@
 const express = 'express';
+const Posts = require('../posts/postDb');
 
 const router = express.Router();
 
