@@ -3,7 +3,7 @@ const Users = require("./userDb");
 
 const router = express.Router();
 
-router.post("/", (req, res) => {});
+router.post("/", validateUser, (req, res) => {});
 
 router.post("/:id/posts", validateUserId, (req, res) => {});
 
@@ -43,7 +43,17 @@ router.get("/:id/posts", validateUserId, (req, res) => {
     });
 });
 
-router.delete("/:id", validateUserId, (req, res) => {});
+router.delete("/:id", validateUserId, (req, res) => {
+  Users.remove(req.user.id)
+    .then(() => {
+      res.status(200).json({ message: "The user has been deleted" });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: `Error removing the user: ${error.message}`
+      });
+    });
+});
 
 router.put("/:id", validateUserId, (req, res) => {});
 
