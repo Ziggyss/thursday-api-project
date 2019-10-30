@@ -1,11 +1,42 @@
 const express = require("express");
 const Users = require("./userDb");
+const Posts = require("../posts/postDb");
 
 const router = express.Router();
 
-router.post("/", validateUser, (req, res) => {});
+router.post("/", validateUser, (req, res) => {
+  const newUser = req.body;
+  Users.insert(newUser)
+    .then(user => {
+      res.status(200).json({
+        message: "New user added successfully",
+        user
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Uh oh. There was an error adding the user",
+        error: err.message
+      });
+    });
+});
 
-router.post("/:id/posts", validateUserId, (req, res) => {});
+router.post("/:id/posts", [validateUserId, validatePost], (req, res) => {
+  const newPost = req.body;
+  Posts.insert(newPost)
+    .then(post => {
+      res.status(200).json({
+        message: "New post added",
+        post
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Something went wrong when adding the new post",
+        error: err.message
+      });
+    });
+});
 
 router.get("/", (req, res) => {
   Users.get()
@@ -56,17 +87,18 @@ router.delete("/:id", validateUserId, (req, res) => {
 });
 
 router.put("/:id", validateUserId, (req, res) => {
-    const {id} = req.params;
-    const newUser = req.body;
-    Users.update(id, newUser)
+  const { id } = req.params;
+  const newUser = req.body;
+  Users.update(id, newUser)
     .then(user => {
       res.status(200).json({
-          message: `You successfully updated ${newUser.name}`,
-          user});
+        message: `You successfully updated ${newUser.name}`,
+        user
+      });
     })
     .catch(error => {
       res.status(500).json({
-        message: 'Error updating the user: ' + error.message,
+        message: "Error updating the user: " + error.message
       });
     });
 });
