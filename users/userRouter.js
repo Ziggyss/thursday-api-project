@@ -24,7 +24,24 @@ router.get("/:id", validateUserId, (req, res) => {
   res.status(200).json(user);
 });
 
-router.get("/:id/posts", validateUserId, (req, res) => {});
+router.get("/:id/posts", validateUserId, (req, res) => {
+  const { id } = req.params;
+  Users.getUserPosts(id)
+    .then(posts => {
+      if (posts.length > 0) {
+        res.status(200).json(posts);
+      } else {
+        res.json({
+          message: "There are no posts yet."
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: err.message
+      });
+    });
+});
 
 router.delete("/:id", validateUserId, (req, res) => {});
 
