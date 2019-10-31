@@ -55,7 +55,11 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+/.env
 
 # Mac files
 .DS_Store
+
+node_modules/
+
+.vscode
