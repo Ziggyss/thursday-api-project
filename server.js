@@ -8,7 +8,7 @@ const postRouter = require('./posts/postRouter');
 
 
 const server = express();
-// const port = process.eventNames.PORT;
+// const port = process.env.PORT;
 
 
 server.use(helmet());
